@@ -3,10 +3,10 @@ name: Node.js CI
 on:
   push:
     branches:
-      - main # Run the CI on pushes to the main branch
+      - master # Run the CI on pushes to the main branch
   pull_request:
     branches:
-      - main # Run CI on pull requests targeting main
+      - master # Run CI on pull requests targeting main
 
 jobs:
   build-and-test:
