@@ -1,25 +1,20 @@
-const express = require("express");
-const router = express.Router();
-const courseController = require("../controllers/courseController");
-const upload = require("../middlewares/uploadMiddleware");
-const { verifyToken } = require("../middlewares/authMiddleware");
+const mongoose = require("mongoose");
 
-// POST route for course creation
-router.post(
-  "/",
-  verifyToken,
-  upload.array("videos"),
-  courseController.createCourse
-);
+const CourseSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  tutor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  isPaid: { type: Boolean, default: false },
+  price: { type: Number, default: 0 },
+  videos: [
+    {
+      title: String,
+      filename: String,
+      path: String,
+      uploadDate: { type: Date, default: Date.now },
+    },
+  ],
+  createdAt: { type: Date, default: Date.now },
+});
 
-// GET all courses
-router.get("/", courseController.getCourses);
-
-// Remove undefined route
-// router.get("/:courseId", courseController.getCourseById);
-
-// Keep existing update/delete routes
-router.put("/:courseId", verifyToken, courseController.updateCourse);
-router.delete("/:courseId", verifyToken, courseController.deleteCourse);
-
-module.exports = router;
+module.exports = mongoose.model("Course", CourseSchema);

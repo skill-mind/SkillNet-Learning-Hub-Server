@@ -2,7 +2,7 @@
 
 # Contributing to SkillNet-Learning-hub
 
-Thank you for your interest in contributing to **SkillNet**! SkillNet is an innovative, blockchain-powered platform that features courses for upskilling in decentralized ecosystem. The backend is built with **Node.js** and integrates with **StarkNet blockchain** for decentralization and security. Here's how you can contribute effectively.
+Thank you for your interest in contributing to **SkillNet**! SkillNet is an innovative, blockchain-powered platform that features courses for upskilling in decentralized ecosystem. The backend is built with **Node.js** and integrates with **StarkNet blockchain** for decentralization and security. Here's how you can contribute effectively without stress.
 
 ## Project Overview
 
