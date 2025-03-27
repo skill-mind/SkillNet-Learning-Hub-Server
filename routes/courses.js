@@ -1,15 +1,20 @@
-const express = require('express');
-const router = express.Router();
-const courseController = require('../controllers/courseController');
-const { verifyToken, requireRole } = require('../middlewares/authMiddleware');
+const mongoose = require("mongoose");
 
-router.post('/', verifyToken, requireRole('tutor'), courseController.createCourse);
+const CourseSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  tutor: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  isPaid: { type: Boolean, default: false },
+  price: { type: Number, default: 0 },
+  videos: [
+    {
+      title: String,
+      filename: String,
+      path: String,
+      uploadDate: { type: Date, default: Date.now },
+    },
+  ],
+  createdAt: { type: Date, default: Date.now },
+});
 
-// Get courses with pagination (public)
-router.get('/', courseController.getCourses);
-
-router.put('/:courseId', verifyToken, requireRole('tutor'), courseController.updateCourse);
-
-router.delete('/:courseId', verifyToken, requireRole('tutor'), courseController.deleteCourse);
-
-module.exports = router;
+module.exports = mongoose.model("Course", CourseSchema);

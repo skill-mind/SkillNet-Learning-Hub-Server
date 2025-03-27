@@ -1,5 +1,28 @@
+# Dependencies
 node_modules/
-package-lock.json
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Environment variables
 .env
-node_modules
-node_modules/*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build files
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Upload directory (except the directory itself)
+uploads/videos/*
+!uploads/videos/.gitkeep
