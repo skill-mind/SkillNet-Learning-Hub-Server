@@ -1,11 +1,26 @@
-const Course = require('../models/Course');
+const Course = require("../models/Course");
+const upload = require("../middlewares/uploadMiddleware");
 
 exports.createCourse = async (req, res, next) => {
   try {
-    const { title, description, tutor, isPaid, price } = req.body;
-    const course = new Course({ title, description, tutor, isPaid, price });
-    await course.save();
-    res.json(course);
+    
+    const videoFiles =
+      req.files?.map((file) => ({
+        filename: file.filename,
+        path: `/uploads/videos/${file.filename}`,
+      })) || [];
+
+    const newCourse = await Course.create({
+      title: req.body.title,
+      description: req.body.description,
+      tutor: req.userId,
+      videos: videoFiles,
+    });
+
+    res.status(201).json({
+      ...newCourse._doc,
+      videos: videoFiles, 
+    });
   } catch (err) {
     next(err);
   }
@@ -29,9 +44,11 @@ exports.getCourses = async (req, res, next) => {
 exports.updateCourse = async (req, res, next) => {
   try {
     const { courseId } = req.params;
-    const updatedCourse = await Course.findByIdAndUpdate(courseId, req.body, { new: true });
+    const updatedCourse = await Course.findByIdAndUpdate(courseId, req.body, {
+      new: true,
+    });
     if (!updatedCourse) {
-      return res.status(404).json({ error: 'Course not found' });
+      return res.status(404).json({ error: "Course not found" });
     }
     res.json(updatedCourse);
   } catch (err) {
@@ -44,9 +61,24 @@ exports.deleteCourse = async (req, res, next) => {
     const { courseId } = req.params;
     const deletedCourse = await Course.findByIdAndDelete(courseId);
     if (!deletedCourse) {
-      return res.status(404).json({ error: 'Course not found' });
+      return res.status(404).json({ error: "Course not found" });
     }
-    res.json({ message: 'Course deleted successfully' });
+    res.json({ message: "Course deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getCourseById = async (req, res, next) => {
+  try {
+    const course = await Course.findById(req.params.courseId).populate(
+      "tutor",
+      "email"
+    );
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+    res.json(course);
   } catch (err) {
     next(err);
   }
